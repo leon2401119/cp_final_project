@@ -1,7 +1,16 @@
 #include <iostream>
 using namespace std;
 
-class expr_node;
+class expr;
+
+class expr_node{
+        friend class expr;
+        int use;
+        public:
+                expr_node():use(1){};
+                virtual ~expr_node(){}
+                virtual int eval() = 0;
+};
 
 class expr{
 	friend class expr_node;
@@ -11,18 +20,17 @@ class expr{
 		expr(int);
 		expr(char,expr&,expr&);
 		~expr(){
-			//delete p;
+			if(--(p->use))
+				delete p;
 		};
 		int eval();
-		// expr& operator=(const expr& t);
+		expr(const expr& t){
+			p = t.p;
+			++p->use;
+		}
+		expr& operator=(const expr& t);
 };
 
-class expr_node{
-	friend class expr;
-	public:
-		virtual ~expr_node(){}
-		virtual int eval() = 0;
-};
 
 class int_node: public expr_node{
 	friend class expr;

@@ -16,10 +16,13 @@ int expr::eval(){
 }
 
 
-/*expr& expr::operator=(const expr& rhs){
+expr& expr::operator=(const expr& rhs){
+	rhs.p->use++;
+	if(--(p->use))
+		delete p;
 	p = rhs.p;
 	return *this;
-}*/
+}
 
 
 int_node::int_node(int num){
