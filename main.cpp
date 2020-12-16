@@ -81,18 +81,14 @@ vector<token> in_to_post(vector<token> infix){
 
 expr make_tree(vector<token> postfix){
     stack<expr> token_list;
-    expr t;
-    expr oprnd1;
-    expr oprnd2;
     for(int i=0;i<postfix.size();i++){
         if(postfix[i].is_operand){
-            t = expr(postfix[i].v.num);
-            token_list.push(t);
+            token_list.push(expr(postfix[i].v.num));
         }
         else{
-            oprnd2=token_list.top();
+            expr oprnd2(token_list.top());
             token_list.pop();
-            oprnd1=token_list.top();
+            expr oprnd1=(token_list.top());
             token_list.pop();
             expr new_node(postfix[i].v.op, oprnd1, oprnd2);
             token_list.push(new_node);
@@ -101,6 +97,18 @@ expr make_tree(vector<token> postfix){
     return token_list.top();
 }
 
+/*
+expr make_tree_revisit(){
+    i++;
+    if(prefix[i].is_operand){
+        return expr(prefix[i].v.num);
+    }
+    else{
+        char op = prefix[i].v.op;
+        return expr(op, make_tree_revisit(), make_tree_revisit());
+    }
+}
+*/
 
 vector<token> tokenizer(string raw){
     vector<token> tokens;
@@ -148,13 +156,11 @@ int main(){
 
 	while(1){
         cout << ">>> ";
-
-
         getline(cin, input);
         tokens = tokenizer(input);
         // tokens = tokenizer("2+((3+4)*7)");
         postfix = in_to_post(tokens);
         expr expression = make_tree(postfix);
-	cout << expression.eval() << endl;
+        cout << expression.eval() << endl;
 	}
 }
