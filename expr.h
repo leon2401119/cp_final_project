@@ -16,13 +16,13 @@ class expr{
 	friend class expr_node;
 	expr_node* p;
 	public:
-		expr(){}
+		expr();
 		expr(int);
 		expr(char,expr&,expr&);
 		~expr(){
-			if(--(p->use))
+			if((!--(p->use)))
 				delete p;
-		};
+		}
 		int eval();
 		expr(const expr& t){
 			p = t.p;
